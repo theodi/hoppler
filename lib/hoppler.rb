@@ -6,11 +6,11 @@ Dotenv.load
 
 class Hoppler
   def self.perform  
-    filename = "backup-#{DateTime.now.strftime("%F")}.sql"
-    system "mysqldump #{ENV['MYSQL_DATABASE']} > #{filename}"
+    filename = "backup-#{DateTime.now.strftime("%F")}.sql.bz2"
+    system "mysqldump #{ENV['MYSQL_DATABASE']} | bzip2 > #{filename}"
     
     dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
-    dir.files.create :key => filename, :body => File.open("/tmp/#{filename}")
+    dir.files.create :key => "#{ENV['MYSQL_DATABASE']}/#{filename}", :body => File.open("/tmp/#{filename}")
   end
   
   def self.cleanup  
