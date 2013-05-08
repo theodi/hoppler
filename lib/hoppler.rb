@@ -4,11 +4,11 @@ require 'dotenv'
 
 Dotenv.load
 
-class DrupalBackup
+class Hoppler
   def self.perform
-    filename = "drupal-backup-#{DateTime.now.strftime("%F")}.sql"
+    filename = "backup-#{DateTime.now.strftime("%F")}.sql"
     
-    system "cd #{ENV['DRUPAL_ROOT']} && drush sql-dump > /tmp/#{filename}"
+    system "mysqldump #{ENV['MYSQL_DATABASE']} > /tmp/#{filename}"
     
     service = self.rackspace
     

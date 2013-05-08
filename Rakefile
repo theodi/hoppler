@@ -1,11 +1,11 @@
-require './lib/drupal-backup.rb'
+require './lib/hoppler.rb'
 
-namespace :drupal do
+namespace :hoppler do
   task :backup do
-    DrupalBackup.perform
+    Hoppler.perform
   end
   
   task :cleanup do
-    DrupalBackup.cleanup
+    Hoppler.cleanup
   end
 end
