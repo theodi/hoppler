@@ -12,8 +12,8 @@ A Ruby script and associated rake tasks to back up a Drupal database into Racksp
 
 You can then add the `rake drupal:backup` and `rake drupal:cleanup` tasks to your crontab like so:
 
-  00 1 * * * cd /path/to/this/dir && rake rake drupal:backup
-  00 2 * * 7 cd /path/to/this/dir && rake rake drupal:cleanup
+    00 1 * * * cd /path/to/this/dir && rake rake drupal:backup
+    00 2 * * 7 cd /path/to/this/dir && rake rake drupal:cleanup
 
 **Note** You must have [Drush](http://drush.ws/) installed for this to work. If you haven't, you really should.
 
