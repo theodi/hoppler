@@ -4,6 +4,7 @@ A Ruby script and associated rake tasks to back up a database into Rackspace clo
 
 ## Usage
 
+* Create a Rackspace files container (if it doesn't already exist)
 * `git pull` the repository into a sensible location on your server
 * Run `bundle install`
 * Create a `.env` file in the same format as `env.example` with your Rackspace username, API key, Container name and your database name
