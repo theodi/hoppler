@@ -5,26 +5,18 @@ require 'dotenv'
 Dotenv.load
 
 class Hoppler
-  def self.perform
-    filename = "backup-#{DateTime.now.strftime("%F")}.sql"
+  def self.perform  
+    system "mysqldump #{ENV['MYSQL_DATABASE']} > /tmp/backup-#{DateTime.now.strftime("%F")}.sql"
     
-    system "mysqldump #{ENV['MYSQL_DATABASE']} > /tmp/#{filename}"
-    
-    service = self.rackspace
-    
-    dir = service.directories.get ENV['RACKSPACE_DB_CONTAINER']
+    dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
     dir.files.create :key => filename, :body => File.open("/tmp/#{filename}")
   end
   
-  def self.cleanup
-    service = self.rackspace
-    
-    dir = service.directories.get ENV['RACKSPACE_DB_CONTAINER']
+  def self.cleanup  
+    dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
     
     dir.files.each do |file|
-      if file.last_modified < (DateTime.now - 1.month)
-        file.destroy
-      end
+      file.destroy if file.last_modified < (DateTime.now - 1.month)
     end
   end
   
