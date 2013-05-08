@@ -5,12 +5,17 @@ require 'dotenv'
 Dotenv.load
 
 class Hoppler
-  def self.perform  
-    filename = "backup-#{DateTime.now.strftime("%F")}.sql.bz2"
-    system "mysqldump #{ENV['MYSQL_DATABASE']} | bzip2 > #{filename}"
+  def self.perform
+    ENV.each do |k,v|
+      if k.match(/HOPPLER_BACKUP/)
+        database = v
+        filename = "#{database}-backup-#{DateTime.now.strftime("%F")}.sql.bz2"
+        system "mysqldump #{database} | bzip2 > /tmp/#{filename}"
     
-    dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
-    dir.files.create :key => "#{ENV['MYSQL_DATABASE']}/#{filename}", :body => File.open("/tmp/#{filename}")
+        dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
+        dir.files.create :key => "#{database}/#{filename}", :body => File.open("/tmp/#{filename}")
+      end
+    end
   end
   
   def self.cleanup  
