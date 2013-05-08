@@ -5,6 +5,7 @@ A Ruby script and associated rake tasks to back up a Drupal database into Racksp
 ## Usage
 
 * `git pull` the repository into a sensible location on your server
+* Run `bundle install`
 * Create a `.env` file in the same format as `env.example` with your Rackspace username, API key, Container name and the full path to your Drupal install
 * Run `rake drupal:backup`
 * Erm
@@ -16,6 +17,8 @@ You can then add the `rake drupal:backup` and `rake drupal:cleanup` tasks to you
     00 2 * * 7 cd /path/to/this/dir && rake rake drupal:cleanup
 
 **Note** You must have [Drush](http://drush.ws/) installed for this to work. If you haven't, you really should.
+
+(It also goes without saying that you'll need Ruby and Bundler installed too)
 
 ## Contributing
 
