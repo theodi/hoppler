@@ -1,16 +1,27 @@
 require 'fog'
 require 'active_support/all'
 require 'dotenv'
+require 'mysql2'
 
-Dotenv.load
+Dotenv.load(".env", ".mysql.env")
 
 class Hoppler
   def self.perform  
-    filename = "backup-#{DateTime.now.strftime("%F")}.sql.bz2"
-    system "mysqldump #{ENV['MYSQL_DATABASE']} | bzip2 > #{filename}"
+    mysql = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
     
-    dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
-    dir.files.create :key => "#{ENV['MYSQL_DATABASE']}/#{filename}", :body => File.open("/tmp/#{filename}")
+    results = mysql.query("SHOW DATABASES")
+    databases = results.map{|row| row['Database']}
+    
+    databases.each do |database|
+    
+      filename = "backup-#{DateTime.now.strftime("%F")}.sql.bz2"
+    
+      filename = "backup-#{DateTime.now.strftime("%F")}.sql.bz2"
+      system "mysqldump #{database} | bzip2 > #{filename}"
+    
+      dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
+      dir.files.create :key => "#{database}/#{filename}", :body => File.open("/tmp/#{filename}")
+    end
   end
   
   def self.cleanup  

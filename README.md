@@ -7,14 +7,8 @@ A Ruby script and associated rake tasks to back up a database into Rackspace clo
 * Create a Rackspace files container (if it doesn't already exist)
 * `git pull` the repository into a sensible location on your server
 * Run `bundle install`
-* Create a `.env` file in the same format as `env.example` with your Rackspace username, API key, Container name and your database name
-* Create the file `~/.my.cnf` (permissions need to be 600)
-* Add your database username and password to the newly created file in this format:
-
-		[mysqldump]
-		user=mysqlusername
-		password=precioussecret
-
+* Create a `.env` file in the same format as `env.example` with your Rackspace username, API key, and container name.
+* Create a `.mysql.env` file in the same format as `mysql.env.example` with your mysql administrator username and password.
 * Run `rake hoppler:backup`
 * Erm
 * That's it
