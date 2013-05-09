@@ -1,6 +1,6 @@
 # Hoppler
 
-A Ruby script and associated rake tasks to back up a database into Rackspace cloud files and clean up old (more than one month) backups.
+A Ruby script and associated rake tasks to back up all local databases into Rackspace cloud files and clean up old (more than one month) backups.
 
 ## Usage
 
@@ -19,8 +19,6 @@ You can then add the `rake hoppler:backup` and `rake hoppler:cleanup` tasks to y
     00 2 * * 7 cd /path/to/this/dir && rake hoppler:cleanup
 
 (It goes without saying that you'll need Ruby and Bundler installed too)
-
-* You can specify multiple databases for backup in the form `HOPPLER_BACKUP_{x}` - this is also handy if you have a Chef setup with a shared data bag for env variables.
 
 ## Contributing
 
