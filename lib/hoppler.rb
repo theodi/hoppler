@@ -7,9 +7,12 @@ require 'tempfile'
 Dotenv.load(".env", ".mysql.env")
 
 class Hoppler
+
+  def self.hostname
+    `hostname`.strip
+  end    
+  
   def self.perform  
-    hostname = `hostname`.strip
-    
     client = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
     
     results = client.query("show databases")
@@ -37,7 +40,8 @@ class Hoppler
     dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
     
     dir.files.each do |file|
-      file.destroy if file.last_modified < (DateTime.now - 1.month)
+      file.destroy if file.key.starts_with?(hostname) && 
+                      file.last_modified < (DateTime.now - 1.month)
     end
   end
   
