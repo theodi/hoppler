@@ -10,9 +10,9 @@ class Hoppler
   def self.perform  
     hostname = `hostname`.strip
     
-    mysql = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
+    client = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
     
-    results = mysql.query("SHOW DATABASES")
+    results = client.query("show databases")
     databases = results.map{|row| row['Database']}
     
     databases.each do |database|

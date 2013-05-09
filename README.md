@@ -20,6 +20,8 @@ You can then add the `rake hoppler:backup` and `rake hoppler:cleanup` tasks to y
 
 (It goes without saying that you'll need Ruby and Bundler installed too)
 
+* You can specify multiple databases for backup in the form `HOPPLER_BACKUP_{x}` - this is also handy if you have a Chef setup with a shared data bag for env variables.
+
 ## Contributing
 
 1. Fork it
