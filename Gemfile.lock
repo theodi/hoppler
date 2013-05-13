@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    active_support (3.0.0)
-      activesupport (= 3.0.0)
-    activesupport (3.0.0)
+    activesupport (3.2.13)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
     builder (3.2.0)
     dotenv (0.7.0)
     excon (0.21.0)
@@ -33,7 +33,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_support
+  activesupport
   dotenv
   fog
   i18n
