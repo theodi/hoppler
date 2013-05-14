@@ -73,8 +73,12 @@ class Hoppler
     end
 
     # Sorry. Really.
-    command = "mysqlshow -u #{ENV['MYSQL_USERNAME']} -p#{ENV['MYSQL_PASSWORD']} | grep -v '\\-\\-\\-' | grep -v Databases | tr -s ' ' ' ' | cut -d ' ' -f 2"
-    existing_dbs = `#{command}`.split
+#    command = "mysqlshow -u #{ENV['MYSQL_USERNAME']} -p#{ENV['MYSQL_PASSWORD']} | grep -v '\\-\\-\\-' | grep -v Databases | tr -s ' ' ' ' | cut -d ' ' -f 2"
+#    existing_dbs = `#{command}`.split
+
+    client = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
+    results = client.query("show databases")
+    existing_dbs = results.map{|row| row['Database']}
 
     require 'yaml'
     y = YAML.load File.open "/root/db.creds.yaml"
