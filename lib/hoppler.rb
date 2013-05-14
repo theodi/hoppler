@@ -84,8 +84,8 @@ class Hoppler
         sql = "create database #{key}; grant all on #{key}.* to '#{key}'@'%' identified by '#{pw}'; flush privileges;"      
         mysql.query(sql)
         bzip = value.download
-        command = "bzcat #{bzip} | mysql -u #{ENV['MYSQL_USERNAME']} -p#{ENV['MYSQL_PASSWORD']} #{key}"
-        `#{command}`
+        dump = `bzcat #{bzip}`
+        mysql.query("USE #{key}; #{dump}")
         File.unlink bzip
       end
     end
