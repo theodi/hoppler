@@ -33,7 +33,7 @@ class Hoppler
     `hostname`.strip
   end    
   
-  def self.perform      
+  def self.backup      
     results = self.connection.query("show databases")
     databases = results.map{|row| row['Database']}
     
