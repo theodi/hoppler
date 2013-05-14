@@ -81,7 +81,7 @@ class Hoppler
     existing_dbs = results.map{|row| row['Database']}
 
     require 'yaml'
-    y = YAML.load File.open "/root/db.creds.yaml"
+    y = YAML.load File.open "db.creds.yaml"
     dumps.each do |key, value|
       if not existing_dbs.include? key
         puts "Restoring #{key}"
