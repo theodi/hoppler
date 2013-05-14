@@ -21,7 +21,7 @@ class Hoppler
     databases.each do |database|
       begin
         # Dump to tempfile
-        tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir, nil    
+        tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
         dump_cmd = "mysqldump #{database} -u #{ENV['MYSQL_USERNAME']} --single-transaction"
         dump_cmd << " --password=#{ENV['MYSQL_PASSWORD']}" if ENV['MYSQL_PASSWORD']
         system "#{dump_cmd} | bzip2 > #{tmpfile}"
