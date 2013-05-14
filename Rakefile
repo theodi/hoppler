@@ -5,6 +5,10 @@ namespace :hoppler do
     Hoppler.perform
   end
   
+  task :restore do
+    Hoppler.restore
+  end
+  
   task :cleanup do
     Hoppler.cleanup
   end
