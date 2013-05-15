@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 #ruby-gemset=hoppler
 
 gem 'multi_json'
-gem 'i18n'
+gem 'i18n', '0.6.1'
 gem 'fog'
 gem 'dotenv'
 gem 'activesupport'
