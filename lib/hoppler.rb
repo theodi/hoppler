@@ -105,8 +105,7 @@ class Hoppler
         :provider            => 'Rackspace',
         :rackspace_username  => ENV['RACKSPACE_USERNAME'],
         :rackspace_api_key   => ENV['RACKSPACE_API_KEY'],
-        :rackspace_auth_url  => Fog::Rackspace::UK_AUTH_ENDPOINT,
-        :rackspace_region    => :lon
+        :rackspace_auth_url  => ENV['RACKSPACE_API_ENDPOINT'],
     })
   end
   
