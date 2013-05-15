@@ -2,7 +2,7 @@ require './lib/hoppler.rb'
 
 namespace :hoppler do
   task :backup do
-    Hoppler.perform
+    Hoppler.backup
   end
   
   task :restore do
