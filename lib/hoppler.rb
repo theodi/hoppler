@@ -125,6 +125,6 @@ class Hoppler
   end
   
   def self.connection
-    client = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])
+    client = Mysql2::Client.new(:host => ENV['MYSQL_HOST'], :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])
   end
 end
