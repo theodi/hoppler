@@ -77,7 +77,13 @@ class Hoppler
     results = mysql.query("show databases")
     existing_dbs = results.map{|row| row['Database']}
 
-    y = YAML.load File.open "/root/db.creds.yaml"
+    if ENV['DB_CREDS_FILE']
+      creds = ENV['DB_CREDS_FILE']
+    else
+      creds = "/root/db.creds.yaml"
+    end
+
+    y = YAML.load File.open creds
     dumps.each do |key, value|
       if not existing_dbs.include? key
         puts "Restoring #{key}"
