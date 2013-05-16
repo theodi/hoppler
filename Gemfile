@@ -9,3 +9,11 @@ gem 'fog'
 gem 'dotenv'
 gem 'activesupport'
 gem 'mysql2'
+
+group :test do
+  gem 'rspec'
+  gem 'spork'
+  gem 'cucumber'
+  gem 'timecop'
+  gem 'pry'
+end
