@@ -88,11 +88,19 @@ class Hoppler
       if not existing_dbs.include? key
         puts "Restoring #{key}"
         pw = y[key]
-        sql = "create database #{key}; grant all on #{key}.* to '#{key}'@'%' identified by '#{pw}'; flush privileges;"      
-        mysql.query(sql)
+        # We have to run these queries seperately because mysql2 doesn't like multiple queries in one lump
+        mysql.query("create database #{key}")
+        mysql.query("grant all on #{key}.* to '#{key}'@'%' identified by '#{pw}';")
+        mysql.query("flush privileges;")
         bzip = value.download
         dump = `bzcat #{bzip}`
-        mysql.query("USE #{key}; #{dump}")
+        
+        command = "mysql -u #{ENV['MYSQL_USERNAME']} "
+        command << " -h #{ENV['MYSQL_HOST']}" if ENV['MYSQL_HOST'] != "localhost"
+        command << " -p#{ENV['MYSQL_PASSWORD']}" if ENV['MYSQL_PASSWORD']
+        command << " #{key}"
+        system "bzcat #{bzip} | #{command}"
+
         File.unlink bzip
       end
     end
