@@ -85,6 +85,7 @@ class Hoppler
     end
 
     y = YAML.load File.open creds
+
     dumps.each do |key, value|
       if not existing_dbs.include? key
         puts "Restoring #{key}"
