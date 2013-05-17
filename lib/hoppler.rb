@@ -20,9 +20,10 @@ class Cloudfile
 
   def download
     tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
-    derp = File.open tmpfile, "w"
-    derp.write @cfile.body
-
+    File.open tmpfile, "w" do |derp| 
+      derp.write @cfile.body
+    end
+    
     tmpfile
   end
 end
