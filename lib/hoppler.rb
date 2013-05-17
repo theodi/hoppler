@@ -81,7 +81,7 @@ class Hoppler
     if ENV['DB_CREDS_FILE']
       creds = ENV['DB_CREDS_FILE']
     else
-      creds = "/root/db.creds.yaml"
+      creds = "db.creds.yaml"
     end
 
     y = YAML.load File.open creds
