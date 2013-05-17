@@ -20,6 +20,12 @@ You can then add the `rake hoppler:backup` and `rake hoppler:cleanup` tasks to y
 
 (It goes without saying that you'll need Ruby and Bundler installed too)
 
+To restore a database, you'll need some DB credentials in a YAML file (by default at `/root/db.creds.yaml`). Then just run `rake hoppler:cleanup` and the lastest backup will be pulled down and restored.
+
+## Running tests
+
+To run tests, just run `bundle exec rake`. This will install some Chef cookbooks, bring up a Vagrant node and then run tests using the Vagrant node as a database server. This is important because we want a consistent, easily destructable environment to test against.
+
 ## Contributing
 
 1. Fork it
