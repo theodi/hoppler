@@ -11,6 +11,7 @@ gem 'activesupport'
 gem 'mysql2'
 
 group :test do
+  gem 'librarian-chef'
   gem 'rspec'
   gem 'spork'
   gem 'cucumber'
