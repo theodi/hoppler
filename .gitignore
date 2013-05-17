@@ -16,6 +16,9 @@ test/tmp
 test/version_tmp
 tmp
 
-/.DS_Store
-/.mysql.env
+cookbooks/
+*.DS_Store
+*.env
+/tmp
+
 .DS_Store
