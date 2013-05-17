@@ -6,10 +6,10 @@ Feature: Clean up old backups
   I want to make sure there are no backups over a month old in Rackspace
   
   Scenario:
-    Given that it's 2013-03-01
-    And I have a database backup called "foobar/db_1/2013-01-03.sql.gz" which was created on "2013-01-01"
-    And I have a database backup called "foobar/db_1/2013-02-28.sql.gz" which was created on "2013-02-28"
+    Given it's 2013-01-03
+    And I have a database called "db_1"
+    And I run the backup command
+    And "db_1" should be backed up into Rackspace
+    And it's two months in the future
     When I run the cleanup command
-    Then I should not have a database backup called "foobar/db_1/2013-01-03.sql.gz"
-    And I should have a database backup called "foobar/db_1/2013-02-28.sql.gz" 
-    
+    Then I should not have a database backup called "db_1/2013-01-03.sql.gz"

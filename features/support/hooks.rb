@@ -13,3 +13,7 @@ After do
     file.destroy
   end
 end
+
+After("@timecop") do
+  Timecop.return
+end
