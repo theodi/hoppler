@@ -1,0 +1,16 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    apt (1.9.2)
+    build-essential (1.4.0)
+    mysql (3.0.0)
+      build-essential (>= 0.0.0)
+      openssl (>= 0.0.0)
+    openssl (1.0.2)
+
+DEPENDENCIES
+  apt (>= 0)
+  build-essential (>= 0)
+  mysql (>= 0)
+  openssl (>= 0)
+
