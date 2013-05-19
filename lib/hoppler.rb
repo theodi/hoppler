@@ -122,7 +122,7 @@ class Hoppler
         :provider            => 'Rackspace',
         :rackspace_username  => ENV['RACKSPACE_USERNAME'],
         :rackspace_api_key   => ENV['RACKSPACE_API_KEY'],
-        :rackspace_region    => :lon
+        :rackspace_region    => ENV['RACKSPACE_REGION'].to_sym
     })
   end
   
