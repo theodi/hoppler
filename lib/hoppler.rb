@@ -48,7 +48,7 @@ class Hoppler
         system "#{dump_cmd} | bzip2 > #{tmpfile}"
         # Write to rackspace
         dir = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
-        filename = "#{hostname}/#{database}/#{DateTime.now.strftime("%F")}.sql.bz2"
+        filename = "#{hostname}/#{database}/#{DateTime.now.strftime("%FT%T")}.sql.bz2"
         dir.files.create :key => filename, :body => File.open(tmpfile)
       ensure
         # Clean up tempfile
