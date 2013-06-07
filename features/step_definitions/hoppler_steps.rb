@@ -21,9 +21,9 @@ Then(/^"(.*?)" should be backed up into Rackspace$/) do |db|
     backups << file.key
   end
   
-  file = "#{Hoppler.hostname}/#{db}/#{DateTime.now.strftime("%F")}.sql.bz2"
+  file = "#{Hoppler.hostname}/#{db}/#{DateTime.now.strftime("%F")}"
   
-  backups.should include(file)
+  backups.to_s.should =~ /#{file}/
 end
 
 Given(/^it's (\d+)\-(\d+)\-(\d+)$/) do |year, month, day|
