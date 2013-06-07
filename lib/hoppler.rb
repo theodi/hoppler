@@ -3,8 +3,30 @@ require 'active_support/all'
 require 'dotenv'
 require 'mysql2'
 require 'tempfile'
+require 'yaml'
 
-Dotenv.load(".env", ".mysql.env")
+Dotenv.load(".env.test", ".env")
+
+class Cloudfile
+  attr_reader :host, :db, :filename, :key
+  def initialize f
+    @cfile = f
+    @key = f.key
+    bits = @key.split "/"
+    @host = bits[0]
+    @db = bits[1]
+    @filename = bits[2]
+  end
+
+  def download
+    tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
+    File.open tmpfile, "w" do |derp| 
+      derp.write @cfile.body
+    end
+    
+    tmpfile
+  end
+end
 
 class Hoppler
 
@@ -12,10 +34,8 @@ class Hoppler
     `hostname`.strip
   end    
   
-  def self.perform  
-    client = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
-    
-    results = client.query("show databases")
+  def self.backup      
+    results = self.connection.query("show databases")
     databases = results.map{|row| row['Database']}
     
     databases.each do |database|
@@ -23,6 +43,7 @@ class Hoppler
         # Dump to tempfile
         tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
         dump_cmd = "mysqldump #{database} -u #{ENV['MYSQL_USERNAME']} --single-transaction"
+        dump_cmd << " -h #{ENV['MYSQL_HOST']} --set-gtid-purged=OFF" if ENV['MYSQL_HOST'] != "localhost"
         dump_cmd << " --password=#{ENV['MYSQL_PASSWORD']}" if ENV['MYSQL_PASSWORD']
         system "#{dump_cmd} | bzip2 > #{tmpfile}"
         # Write to rackspace
@@ -33,26 +54,6 @@ class Hoppler
         # Clean up tempfile
         FileUtils.rm tmpfile if tmpfile && File.exists?(tmpfile)
       end
-    end
-  end
-
-  class Cloudfile
-    attr_reader :host, :db, :filename, :key
-    def initialize f
-      @cfile = f
-      @key = f.key
-      bits = @key.split "/"
-      @host = bits[0]
-      @db = bits[1]
-      @filename = bits[2]
-    end
-
-    def download
-      tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
-      derp = File.open tmpfile, "w"
-      derp.write @cfile.body
-
-      tmpfile
     end
   end
 
@@ -71,27 +72,37 @@ class Hoppler
         end
       end
     end
-
-    # Sorry. Really.
-#    command = "mysqlshow -u #{ENV['MYSQL_USERNAME']} -p#{ENV['MYSQL_PASSWORD']} | grep -v '\\-\\-\\-' | grep -v Databases | tr -s ' ' ' ' | cut -d ' ' -f 2"
-#    existing_dbs = `#{command}`.split
-
-    client = Mysql2::Client.new(:host => "localhost", :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])    
-    results = client.query("show databases")
+    
+    mysql = self.connection
+    
+    results = mysql.query("show databases")
     existing_dbs = results.map{|row| row['Database']}
 
-    require 'yaml'
-    y = YAML.load File.open "db.creds.yaml"
+    if ENV['DB_CREDS_FILE']
+      creds = ENV['DB_CREDS_FILE']
+    else
+      creds = "db.creds.yaml"
+    end
+
+    y = YAML.load File.open creds
+
     dumps.each do |key, value|
       if not existing_dbs.include? key
         puts "Restoring #{key}"
         pw = y[key]
-        sql = "create database #{key}; grant all on #{key}.* to '#{key}'@'%' identified by '#{pw}'; flush privileges;"
-        command = "mysql -u #{ENV['MYSQL_USERNAME']} -p#{ENV['MYSQL_PASSWORD']} -e \"%s\"" % [ sql ]
-        `#{command}`
+        # We have to run these queries seperately because mysql2 doesn't like multiple queries in one lump
+        mysql.query("create database #{key}")
+        mysql.query("grant all on #{key}.* to '#{key}'@'%' identified by '#{pw}';")
+        mysql.query("flush privileges;")
         bzip = value.download
-        command = "bzcat #{bzip} | mysql -u #{ENV['MYSQL_USERNAME']} -p#{ENV['MYSQL_PASSWORD']} #{key}"
-        `#{command}`
+        dump = `bzcat #{bzip}`
+        
+        command = "mysql -u #{ENV['MYSQL_USERNAME']} "
+        command << " -h #{ENV['MYSQL_HOST']}" if ENV['MYSQL_HOST'] != "localhost"
+        command << " -p#{ENV['MYSQL_PASSWORD']}" if ENV['MYSQL_PASSWORD']
+        command << " #{key}"
+        system "bzcat #{bzip} | #{command}"
+
         File.unlink bzip
       end
     end
@@ -111,8 +122,11 @@ class Hoppler
         :provider            => 'Rackspace',
         :rackspace_username  => ENV['RACKSPACE_USERNAME'],
         :rackspace_api_key   => ENV['RACKSPACE_API_KEY'],
-        :rackspace_auth_url  => Fog::Rackspace::UK_AUTH_ENDPOINT,
-        :rackspace_region    => :lon
+        :rackspace_region    => ENV['RACKSPACE_REGION'].to_sym
     })
+  end
+  
+  def self.connection
+    client = Mysql2::Client.new(:host => ENV['MYSQL_HOST'], :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])
   end
 end
