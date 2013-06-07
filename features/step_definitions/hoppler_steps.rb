@@ -61,11 +61,11 @@ Given(/^I delete all databases$/) do
 end
 
 Then(/^"(.*?)" should contain the correct stuff$/) do |db|
-  original = `cat ./features/fixtures/#{db}.sql | grep -v "Dump completed on"`
+  original = `cat ./features/fixtures/#{db}.sql | grep -v -e ^--`
   dump_cmd = "mysqldump #{db} -u #{ENV['MYSQL_USERNAME']} --single-transaction"
   dump_cmd << " -h #{ENV['MYSQL_HOST']} --set-gtid-purged=OFF" if ENV['MYSQL_HOST'] != "localhost"
   dump_cmd << " --password=#{ENV['MYSQL_PASSWORD']}" if ENV['MYSQL_PASSWORD']
-  dump = `#{dump_cmd} | grep -v "Dump completed on"`
+  dump = `#{dump_cmd} | grep -v -e ^--`
   original.should == dump
 end
 
