@@ -16,6 +16,11 @@ test/tmp
 test/version_tmp
 tmp
 
+cookbooks/
+*.DS_Store
+*.env
+/tmp
 /.DS_Store
 /.mysql.env
 .idea/
+>>>>>>> c0a5246a83d80221b8b4c8cdc289594c5e5ffa21
