@@ -26,6 +26,8 @@ To restore a database, you'll need some DB credentials in a YAML file (by defaul
 
 To run tests, just run `bundle exec rake`. This will install some Chef cookbooks, bring up a Vagrant node and then run tests using the Vagrant node as a database server. This is important because we want a consistent, easily destructable environment to test against.
 
+There is an exmaple `.env.test` file to run the tests against. Just add your Rackspace credentials, rename it to `.env.test` and it should just work.
+
 ## Contributing
 
 1. Fork it
