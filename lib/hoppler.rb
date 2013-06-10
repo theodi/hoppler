@@ -38,11 +38,7 @@ class Hoppler
     results = self.connection.query("show databases")
     databases = results.map{|row| row['Database']}
     
-    if ENV['MYSQL_HOST'] != "localhost"
-      host = ENV['MYSQL_HOST']
-    else
-      host = "localhost"
-    end
+    ENV['MYSQL_HOST'] = "localhost" if ENV['MYSQL_HOST'].nil?
     
     databases.each do |database|
       begin
@@ -83,6 +79,8 @@ class Hoppler
     
     results = mysql.query("show databases")
     existing_dbs = results.map{|row| row['Database']}
+    
+    ENV['MYSQL_HOST'] = "localhost" if ENV['MYSQL_HOST'].nil?
 
     if ENV['DB_CREDS_FILE']
       creds = ENV['DB_CREDS_FILE']
@@ -133,6 +131,7 @@ class Hoppler
   end
   
   def self.connection
+    ENV['MYSQL_HOST'] = "localhost" if ENV['MYSQL_HOST'].nil?
     client = Mysql2::Client.new(:host => ENV['MYSQL_HOST'], :username => ENV['MYSQL_USERNAME'], :password => ENV['MYSQL_PASSWORD'])
   end
 end
