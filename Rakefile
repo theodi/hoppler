@@ -1,11 +1,4 @@
 require './lib/hoppler.rb'
-require 'cucumber'
-require 'cucumber/rake/task'
-
-Cucumber::Rake::Task.new(:features) do |t|
-  system("librarian-chef install && vagrant up")
-  t.cucumber_opts = "features --format pretty"
-end
 
 namespace :hoppler do
   task :backup do
@@ -21,4 +14,17 @@ namespace :hoppler do
   end
 end
 
-task :default => [:features]
+namespace :features do
+  require 'cucumber'
+  require 'cucumber/rake/task'
+  
+  task :cucumber do
+    Cucumber::Rake::Task.new(:features) do |t|
+      system("librarian-chef install && vagrant up")
+      t.cucumber_opts = "features --format pretty"
+      system("cucumber")
+    end
+  end
+end
+
+task :default => ["features:cucumber"]
