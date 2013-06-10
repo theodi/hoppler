@@ -38,12 +38,18 @@ class Hoppler
     results = self.connection.query("show databases")
     databases = results.map{|row| row['Database']}
     
+    if ENV['MYSQL_HOST'] != "localhost"
+      host = ENV['MYSQL_HOST']
+    else
+      host = "localhost"
+    end
+    
     databases.each do |database|
       begin
         # Dump to tempfile
         tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
         dump_cmd = "mysqldump #{database} -u #{ENV['MYSQL_USERNAME']} --single-transaction"
-        dump_cmd << " -h #{ENV['MYSQL_HOST']} --set-gtid-purged=OFF" if ENV['MYSQL_HOST'] != "localhost"
+        dump_cmd << " -h #{host} --set-gtid-purged=OFF"
         dump_cmd << " --password=#{ENV['MYSQL_PASSWORD']}" if ENV['MYSQL_PASSWORD']
         system "#{dump_cmd} | bzip2 > #{tmpfile}"
         # Write to rackspace
