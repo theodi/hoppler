@@ -81,6 +81,10 @@ When(/^I run the restore command$/) do
   `rake hoppler:restore`
 end
 
+When(/^I run the restore command for "(.*?)"$/) do |hostname|
+  `rake hoppler:restore['#{hostname}']`
+end
+
 Then(/^I should have a database called "(.*?)"$/) do |db|
   mysql.query("SHOW DATABASES LIKE '#{db}'").count.should == 1
 end
