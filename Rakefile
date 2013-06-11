@@ -1,12 +1,19 @@
 require './lib/hoppler.rb'
 
-namespace :hoppler do
+namespace :hoppler do 
+  task :environment do
+  end
+  
   task :backup do
     Hoppler.backup
   end
   
-  task :restore do
-    Hoppler.restore
+  task :restore, [:hostname] => :environment do |t, args|
+    if args[:hostname].nil?
+      Hoppler.restore
+    else
+      Hoppler.restore(args[:hostname])
+    end
   end
   
   task :cleanup do
