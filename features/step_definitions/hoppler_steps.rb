@@ -8,6 +8,14 @@ Given(/^I have a database called "(.*?)"$/) do |db|
   system command
 end
 
+Given(/^there is a database backup called "(.*?)\/(.*?)\/(.*?).sql.bz2" in Rackspace$/) do |hostname, db, date|
+  tmpfile = Dir::Tmpname.make_tmpname Dir.tmpdir+File::Separator, nil
+  system "cat ./features/fixtures/#{db}.sql | bzip2 > #{tmpfile}"
+  dir = Hoppler.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
+  filename = "#{hostname}/#{db}/#{filename}.sql.bz2"
+  dir.files.create :key => filename, :body => File.open(tmpfile)
+end
+
 When(/^I run the backup command$/) do
   Hoppler.backup
 end
@@ -36,7 +44,7 @@ Given(/^it's two months in the future$/) do
 end
 
 When(/^I run the cleanup command$/) do
-  Hoppler.cleanup
+  `rake hoppler:cleanup`
 end
 
 Then(/^I should not have a database backup called "(.*?)"$/) do |file|
@@ -70,7 +78,7 @@ Then(/^"(.*?)" should contain the correct stuff$/) do |db|
 end
 
 When(/^I run the restore command$/) do
-  Hoppler.restore
+  `rake hoppler:restore`
 end
 
 Then(/^I should have a database called "(.*?)"$/) do |db|
