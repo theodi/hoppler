@@ -7,10 +7,29 @@ SITE
       build-essential (>= 0.0.0)
       openssl (>= 0.0.0)
     openssl (1.0.2)
+    python (1.4.0)
+      build-essential (>= 0.0.0)
+      yum (>= 0.0.0)
+    runit (1.3.0)
+      build-essential (>= 0.0.0)
+      yum (>= 0.0.0)
+    yum (2.3.4)
+
+GIT
+  remote: https://github.com/edelight/chef-mongodb
+  ref: master
+  sha: f74a1f2a55b4bcc7c2b1df4b726c20455595e8e5
+  specs:
+    mongodb (0.13.4)
+      apt (>= 0.0.0)
+      python (>= 0.0.0)
+      runit (>= 0.0.0)
+      yum (>= 0.0.0)
 
 DEPENDENCIES
   apt (>= 0)
   build-essential (>= 0)
+  mongodb (>= 0)
   mysql (>= 0)
   openssl (>= 0)
 

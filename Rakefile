@@ -4,6 +4,10 @@ namespace :hoppler do
   task :backup do
     Hoppler.backup
   end
+
+  task :backup_mongo do
+    Hoppler.backup "mongo"
+  end
   
   task :restore do
     Hoppler.restore
