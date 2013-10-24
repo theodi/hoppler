@@ -76,9 +76,6 @@ class Hoppler
           tarfile
       ]
 
-      puts filename
-      puts tarpath
-
       dir.files.create :key => filename, :body => File.open(tarpath)
     ensure
       FileUtils.rmtree tmpdir if tmpdir && File.exists?(tmpdir)
