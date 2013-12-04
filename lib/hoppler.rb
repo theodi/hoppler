@@ -5,7 +5,7 @@ require 'mysql2'
 require 'tempfile'
 require 'yaml'
 
-Dotenv.load(".env.test", ".env", ".mysql.env")
+Dotenv.load(".env.test", ".env", ".mysql.env", ".local.env")
 
 class Cloudfile
   attr_reader :host, :db, :filename, :key
