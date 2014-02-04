@@ -108,12 +108,12 @@ class Hoppler
     end
   end
 
-  def self.restore
+  def self.restore(hostname = self.hostname)
     dumps = {}
     dir   = self.rackspace.directories.get ENV['RACKSPACE_DB_CONTAINER']
     dir.files.each do |f|
       c = Cloudfile.new f
-      if c.host == self.hostname
+      if c.host == hostname
         if dumps[c.db]
           if c.key > dumps[c.db].key
             dumps[c.db] = c

@@ -14,3 +14,12 @@ Feature: Restore databases from backup
     And I should have a database called "db_2"
     And "db_1" should contain the correct stuff
     And "db_2" should contain the correct stuff
+  
+  Scenario: Restore databases from a specific node
+    Given there is a database backup called "derp-the-odi-org/db_1/2013-05-28.sql.bz2" in Rackspace
+    And there is a database backup called "derp-the-odi-org/db_2/2013-05-28.sql.bz2" in Rackspace
+    When I run the restore command for "derp-the-odi-org"
+    Then I should have a database called "db_1"
+    And I should have a database called "db_2"
+    And "db_1" should contain the correct stuff
+    And "db_2" should contain the correct stuff
